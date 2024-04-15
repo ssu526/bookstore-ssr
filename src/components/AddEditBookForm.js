@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { closeModal } from "../slices/modalSlice.js";
+import { useSelector, useDispatch } from "react-redux";
 
-const AddEditBookForm = ({
-  isModalOpen,
-  closeModal,
-  handleAdd,
-  handleEdit,
-  book,
-}) => {
+const AddEditBookForm = ({ handleAdd, handleEdit }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [inputError, setInputError] = useState("");
+
+  const dispatch = useDispatch();
+  const isModalOpen = useSelector((state) => state.modal.isModalOpen);
+  const book = useSelector((state) => state.modal.selectedBook);
 
   useEffect(() => {
     if (book !== null) {
@@ -27,11 +27,16 @@ const AddEditBookForm = ({
 
     if (
       name.trim() === "" ||
-      price.trim === "" ||
-      category.trim === "" ||
+      price.trim() === "" ||
+      category.trim() === "" ||
       description.trim() === ""
     ) {
       setInputError("All fields are required.");
+      return;
+    }
+
+    if (isNaN(Number(price.trim()))) {
+      setInputError("Book price must be a number.");
       return;
     }
 
@@ -42,12 +47,12 @@ const AddEditBookForm = ({
     }
 
     resetForm();
-    closeModal();
+    dispatch(closeModal());
   };
 
   const handleCancel = () => {
     resetForm();
-    closeModal();
+    dispatch(closeModal());
   };
 
   const resetForm = () => {
@@ -55,6 +60,7 @@ const AddEditBookForm = ({
     setPrice("");
     setCategory("");
     setDescription("");
+    setInputError("");
   };
 
   return (
@@ -66,24 +72,36 @@ const AddEditBookForm = ({
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setInputError("");
+              setName(e.target.value);
+            }}
             placeholder="Name*"
           />
           <input
             type="text"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => {
+              setInputError("");
+              setPrice(e.target.value);
+            }}
             placeholder="Price*"
           />
           <input
             type="text"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setInputError("");
+              setCategory(e.target.value);
+            }}
             placeholder="Category*"
           />
           <textarea
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setInputError("");
+              setDescription(e.target.value);
+            }}
             placeholder="Description*"
           />
           <button type="submit" onClick={(e) => handleSubmit(e)}>
