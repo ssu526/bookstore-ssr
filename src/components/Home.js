@@ -11,7 +11,8 @@ import {
 } from "../slices/bookSlice.js";
 import { openModal } from "../slices/modalSlice.js";
 
-const API_BASE_URL = "http://localhost:8000/api/v1";
+//const API_BASE_URL = "http://localhost:8000/api/v1";
+const API_BASE_URL = "https://bookstore-blazesoft.onrender.com/api/v1";
 
 function Home({ initialDataFromServer }) {
   const books = useSelector((state) => state.books.value);

@@ -6,6 +6,7 @@ import ReactDomServer from "react-dom/server";
 import App from "./src/App.js";
 
 const app = express();
+const PORT = process.env.PORT || 8000;
 
 global.window = {};
 
@@ -97,5 +98,5 @@ app.delete(`${API_BASE_URL}/delete/:id`, (req, res) => {
 });
 
 app.listen(8000, () => {
-  console.log("Listening on port 8000");
+  console.log("Listening on port " + PORT);
 });
