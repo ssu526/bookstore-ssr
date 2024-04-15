@@ -1,28 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import "../App.css";
 import AddEditBookForm from "./AddEditBookForm.js";
 import BookDetail from "./BookDetail.js";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  addBook,
-  removeBook,
-  editBook,
-  loadBooks,
-} from "../slices/bookSlice.js";
+import { useDispatch } from "react-redux";
 import { openModal } from "../slices/modalSlice.js";
 
 //const API_BASE_URL = "http://localhost:8000/api/v1";
 const API_BASE_URL = "https://bookstore-blazesoft.onrender.com/api/v1";
 
 function Home({ initialDataFromServer }) {
-  const books = useSelector((state) => state.books.value);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (window && window.preloadedBooks) {
-      dispatch(loadBooks(window.preloadedBooks));
-    }
-  }, []);
+  const [books, setbooks] = useState(window && window.preloadedBooks);
 
   const handleAdd = (newBook) => {
     fetch(`${API_BASE_URL}/add`, {
@@ -39,7 +27,7 @@ function Home({ initialDataFromServer }) {
         return response.json();
       })
       .then((data) => {
-        dispatch(addBook(data));
+        setbooks([...books, data]);
       })
       .catch((err) => {
         console.log(err);
@@ -61,7 +49,14 @@ function Home({ initialDataFromServer }) {
         return response.json();
       })
       .then((data) => {
-        dispatch(editBook(data));
+        setbooks(
+          books.map((book) => {
+            if (book.id === data.id) {
+              return data;
+            }
+            return book;
+          })
+        );
       });
   };
 
@@ -73,7 +68,7 @@ function Home({ initialDataFromServer }) {
         if (!response.ok) {
           throw new Error("Error");
         }
-        dispatch(removeBook(id));
+        setbooks(books.filter((book) => book.id !== id));
       })
       .catch((err) => {
         console.log(err);

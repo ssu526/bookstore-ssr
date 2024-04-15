@@ -11,16 +11,16 @@ const AddEditBookForm = ({ handleAdd, handleEdit }) => {
 
   const dispatch = useDispatch();
   const isModalOpen = useSelector((state) => state.modal.isModalOpen);
-  const book = useSelector((state) => state.modal.selectedBook);
+  const selectedBook = useSelector((state) => state.modal.selectedBook);
 
   useEffect(() => {
-    if (book !== null) {
-      setName(book.name);
-      setPrice(book.price);
-      setCategory(book.category);
-      setDescription(book.description);
+    if (selectedBook !== null) {
+      setName(selectedBook.name);
+      setPrice(selectedBook.price);
+      setCategory(selectedBook.category);
+      setDescription(selectedBook.description);
     }
-  }, [book]);
+  }, [selectedBook]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,8 +40,8 @@ const AddEditBookForm = ({ handleAdd, handleEdit }) => {
       return;
     }
 
-    if (book) {
-      handleEdit({ ...book, name, price, category, description });
+    if (selectedBook) {
+      handleEdit({ ...selectedBook, name, price, category, description });
     } else {
       handleAdd({ name, price, category, description });
     }
@@ -66,7 +66,7 @@ const AddEditBookForm = ({ handleAdd, handleEdit }) => {
   return (
     <div className={`modal-container ${isModalOpen ? "" : "hide"}`}>
       <div className="modal">
-        <h1 className="form-title">{book ? "Edit " : "Add "} Book</h1>
+        <h1 className="form-title">{selectedBook ? "Edit " : "Add "} Book</h1>
         <p className="errormessage">{inputError}</p>
         <form className="add-edit-form">
           <input
@@ -105,7 +105,7 @@ const AddEditBookForm = ({ handleAdd, handleEdit }) => {
             placeholder="Description*"
           />
           <button type="submit" onClick={(e) => handleSubmit(e)}>
-            {book ? "Save" : "Add"}
+            {selectedBook ? "Save" : "Add"}
           </button>
           <button onClick={handleCancel}>Cancel</button>
         </form>
