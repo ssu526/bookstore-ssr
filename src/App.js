@@ -5,7 +5,7 @@ import Home from "./components/Home";
 import booksReducer from "./slices/bookSlice";
 import modalReducer from "./slices/modalSlice";
 
-const App = () => {
+const App = ({ initialDataFromServer }) => {
   const store = configureStore({
     reducer: {
       books: booksReducer,
@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Home />
+      <Home initialDataFromServer={initialDataFromServer} />
     </Provider>
   );
 };

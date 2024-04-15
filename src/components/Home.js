@@ -17,10 +17,6 @@ function Home({ initialDataFromServer }) {
   const books = useSelector((state) => state.books.value);
   const dispatch = useDispatch();
 
-  // window.preloadedBooks = [
-  //   { name: "aaa", price: 22, category: "kkk", description: "eee" },
-  // ];
-
   useEffect(() => {
     if (window && window.preloadedBooks) {
       dispatch(loadBooks(window.preloadedBooks));
